@@ -24,6 +24,17 @@ GREEN = (0, 255, 0)     # S piece
 PURPLE = (128, 0, 128)  # T piece
 RED = (255, 0, 0)       # Z piece
 
+# Shadow colors - 25% opacity of original colors
+SHADOW_COLORS = [
+    (0, 255, 255, 64),      # CYAN
+    (0, 0, 255, 64),        # BLUE
+    (255, 165, 0, 64),      # ORANGE
+    (255, 255, 0, 64),      # YELLOW
+    (0, 255, 0, 64),        # GREEN
+    (128, 0, 128, 64),      # PURPLE
+    (255, 0, 0, 64)         # RED
+]
+
 # Tetromino shapes
 SHAPES = [
     [[1, 1, 1, 1]],                         # I
@@ -61,6 +72,9 @@ class TetrisGame:
         self.score = 0
         self.fall_time = 0
         self.fall_speed = 0.5  # Time in seconds between automatic drops
+        
+        # Create a surface for shadow pieces with alpha channel
+        self.shadow_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
 
     def draw_grid(self) -> None:
         # Draw the game grid
@@ -157,6 +171,40 @@ class TetrisGame:
         if lines_cleared > 0:
             self.score += (100 * lines_cleared) * lines_cleared  # Bonus for multiple lines
 
+    def get_shadow_position(self) -> int:
+        """Calculate the lowest possible position for the current piece."""
+        if not self.current_piece:
+            return 0
+            
+        shadow_y = self.current_piece.y
+        while not self.check_collision(y_offset=shadow_y - self.current_piece.y + 1):
+            shadow_y += 1
+        return shadow_y
+
+    def draw_shadow(self) -> None:
+        """Draw the shadow of the current piece."""
+        if self.current_piece:
+            shadow_y = self.get_shadow_position()
+            
+            # Clear the shadow surface
+            self.shadow_surface.fill((0, 0, 0, 0))
+            
+            # Draw the shadow piece
+            for y, row in enumerate(self.current_piece.shape):
+                for x, cell in enumerate(row):
+                    if cell:
+                        shadow_color = SHADOW_COLORS[self.current_piece.shape_idx]
+                        pygame.draw.rect(
+                            self.shadow_surface,
+                            shadow_color,
+                            ((self.current_piece.x + x) * BLOCK_SIZE,
+                             (shadow_y + y) * BLOCK_SIZE,
+                             BLOCK_SIZE - 1, BLOCK_SIZE - 1)
+                        )
+            
+            # Blit the shadow surface onto the main screen
+            self.screen.blit(self.shadow_surface, (0, 0))
+
     def run(self) -> None:
         last_fall_time = pygame.time.get_ticks()
         
@@ -208,6 +256,7 @@ class TetrisGame:
                 # Draw everything
                 self.screen.fill(BLACK)
                 self.draw_grid()
+                self.draw_shadow()  # Draw shadow before the current piece
                 self.draw_current_piece()
                 self.draw_next_piece()
                 
