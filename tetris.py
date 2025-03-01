@@ -13,6 +13,10 @@ GRID_HEIGHT = 20
 SCREEN_WIDTH = BLOCK_SIZE * (GRID_WIDTH + 6)  # Extra space for next piece preview
 SCREEN_HEIGHT = BLOCK_SIZE * GRID_HEIGHT
 
+# Scoring constants
+SOFT_DROP_SCORE = 1    # Points per cell for soft drop
+HARD_DROP_SCORE = 2    # Points per cell for hard drop
+
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -80,9 +84,9 @@ class TetrisGame:
     def add_drop_score(self, distance: int, is_hard_drop: bool = False) -> None:
         """Add score for dropping pieces. Hard drops score more than soft drops."""
         if is_hard_drop:
-            self.score += distance * 2  # 2 points per cell for hard drop
+            self.score += distance * HARD_DROP_SCORE
         else:
-            self.score += distance  # 1 point per cell for soft drop
+            self.score += distance * SOFT_DROP_SCORE
 
     def draw_grid(self) -> None:
         # Draw the game grid
