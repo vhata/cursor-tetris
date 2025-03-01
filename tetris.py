@@ -77,6 +77,13 @@ class TetrisGame:
         # Create a surface for shadow pieces with alpha channel
         self.shadow_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
 
+    def add_drop_score(self, distance: int, is_hard_drop: bool = False) -> None:
+        """Add score for dropping pieces. Hard drops score more than soft drops."""
+        if is_hard_drop:
+            self.score += distance * 2  # 2 points per cell for hard drop
+        else:
+            self.score += distance  # 1 point per cell for soft drop
+
     def draw_grid(self) -> None:
         # Draw the game grid
         for y in range(GRID_HEIGHT):
@@ -112,13 +119,24 @@ class TetrisGame:
         next_piece_x = GRID_WIDTH * BLOCK_SIZE + BLOCK_SIZE
         next_piece_y = BLOCK_SIZE * 2
         
+        # Draw "Next:" label
+        font = pygame.font.Font(None, 36)
+        next_label = font.render('Next:', True, WHITE)
+        self.screen.blit(next_label, (next_piece_x, BLOCK_SIZE))
+        
         # Draw preview box
         pygame.draw.rect(
             self.screen,
-            WHITE,
-            (next_piece_x, BLOCK_SIZE, 4 * BLOCK_SIZE, 4 * BLOCK_SIZE),
+            DARK_GRAY,  # Match the grid color
+            (next_piece_x, next_piece_y, 4 * BLOCK_SIZE, 4 * BLOCK_SIZE),
             1
         )
+        
+        # Center the piece in the preview box
+        piece_width = len(self.next_piece.shape[0]) * BLOCK_SIZE
+        piece_height = len(self.next_piece.shape) * BLOCK_SIZE
+        center_x = next_piece_x + (4 * BLOCK_SIZE - piece_width) // 2
+        center_y = next_piece_y + (4 * BLOCK_SIZE - piece_height) // 2
         
         # Draw the next piece
         for y, row in enumerate(self.next_piece.shape):
@@ -127,8 +145,8 @@ class TetrisGame:
                     pygame.draw.rect(
                         self.screen,
                         self.next_piece.color,
-                        (next_piece_x + x * BLOCK_SIZE,
-                         next_piece_y + y * BLOCK_SIZE,
+                        (center_x + x * BLOCK_SIZE,
+                         center_y + y * BLOCK_SIZE,
                          BLOCK_SIZE - 1, BLOCK_SIZE - 1)
                     )
 
