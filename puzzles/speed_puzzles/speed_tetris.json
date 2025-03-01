@@ -1,0 +1,38 @@
+{
+  "name": "Speed Tetris",
+  "description": "Clear 8 lines in 45 seconds while navigating around the obstacles. Watch out for the gaps!",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["BLUE", null, "BLUE", null, "BLUE", null, "BLUE", null, "BLUE", null],
+    ["RED", null, "RED", null, "RED", null, "RED", null, "RED", null],
+    ["GREEN", null, "GREEN", null, "GREEN", null, "GREEN", null, "GREEN", null],
+    ["YELLOW", null, "YELLOW", null, "YELLOW", null, "YELLOW", null, "YELLOW", null],
+    ["PURPLE", null, "PURPLE", null, "PURPLE", null, "PURPLE", null, "PURPLE", null],
+    ["CYAN", null, "CYAN", null, "CYAN", null, "CYAN", null, "CYAN", null],
+    ["ORANGE", null, "ORANGE", null, "ORANGE", null, "ORANGE", null, "ORANGE", null],
+    ["BLUE", null, "BLUE", null, "BLUE", null, "BLUE", null, "BLUE", null]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 8,
+      "current_value": 0
+    },
+    {
+      "goal_type": "time_limit",
+      "target_value": 45,
+      "current_value": 0
+    }
+  ]
+} 

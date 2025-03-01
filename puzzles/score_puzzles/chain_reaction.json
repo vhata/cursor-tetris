@@ -1,0 +1,38 @@
+{
+  "name": "Chain Reaction",
+  "description": "Score 1500 points by creating chain reactions. Clear multiple lines in quick succession for bonus points!",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["RED", "RED", "RED", "RED", "RED", "RED", "RED", "RED", null, null],
+    ["BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", null, null],
+    ["GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", null, null],
+    ["YELLOW", "YELLOW", "YELLOW", "YELLOW", null, null, null, null, null, null],
+    ["PURPLE", "PURPLE", "PURPLE", "PURPLE", null, null, null, null, null, null],
+    ["CYAN", "CYAN", "CYAN", "CYAN", null, null, null, null, null, null]
+  ],
+  "goals": [
+    {
+      "goal_type": "score",
+      "target_value": 1500,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 6,
+      "current_value": 0
+    }
+  ]
+} 

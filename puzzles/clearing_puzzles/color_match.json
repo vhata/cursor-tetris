@@ -1,0 +1,38 @@
+{
+  "name": "Color Match",
+  "description": "Clear 5 lines, but you can only place pieces next to blocks of the same color!",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["RED", null, "BLUE", null, "GREEN", null, "YELLOW", null, "PURPLE", null],
+    ["RED", null, "BLUE", null, "GREEN", null, "YELLOW", null, "PURPLE", null],
+    ["RED", null, "BLUE", null, "GREEN", null, "YELLOW", null, "PURPLE", null],
+    ["RED", null, "BLUE", null, "GREEN", null, "YELLOW", null, "PURPLE", null],
+    ["RED", null, "BLUE", null, "GREEN", null, "YELLOW", null, "PURPLE", null]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 5,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 7,
+      "current_value": 0
+    }
+  ]
+} 

@@ -1,0 +1,48 @@
+{
+  "name": "Heart Shape",
+  "description": "Create a heart shape using red blocks. The heart should be 7 blocks wide and 6 blocks tall.",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null]
+  ],
+  "goals": [
+    {
+      "goal_type": "pattern",
+      "target_value": 16,
+      "current_value": 0,
+      "pattern": [
+        [null, "RED", "RED", null, "RED", "RED", null],
+        ["RED", "RED", "RED", "RED", "RED", "RED", "RED"],
+        ["RED", "RED", "RED", "RED", "RED", "RED", "RED"],
+        [null, "RED", "RED", "RED", "RED", "RED", null],
+        [null, null, "RED", "RED", "RED", null, null],
+        [null, null, null, "RED", null, null, null]
+      ],
+      "pattern_x": 1,
+      "pattern_y": 12
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 8,
+      "current_value": 0
+    }
+  ]
+} 

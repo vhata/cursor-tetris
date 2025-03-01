@@ -1,0 +1,46 @@
+{
+  "name": "Classic Tetrominos",
+  "description": "Create all four classic Tetris shapes: I, O, L, and T pieces using their traditional colors.",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null]
+  ],
+  "goals": [
+    {
+      "goal_type": "pattern",
+      "target_value": 14,
+      "current_value": 0,
+      "pattern": [
+        ["CYAN", null, null, "YELLOW", "YELLOW", null, "ORANGE", null, null, "PURPLE"],
+        ["CYAN", null, null, "YELLOW", "YELLOW", null, "ORANGE", null, "PURPLE", "PURPLE"],
+        ["CYAN", null, null, null, null, null, "ORANGE", null, null, "PURPLE"],
+        ["CYAN", null, null, null, null, null, "ORANGE", null, null, null]
+      ],
+      "pattern_x": 0,
+      "pattern_y": 15
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 6,
+      "current_value": 0
+    }
+  ]
+} 

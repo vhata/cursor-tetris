@@ -1,0 +1,38 @@
+{
+  "name": "Perfect Fit",
+  "description": "Clear all the gaps with exactly 3 pieces. Each piece must be placed perfectly!",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["RED", "RED", null, null, "RED", "RED", "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "BLUE", "BLUE", "BLUE", "BLUE"],
+    ["GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", null, null, "GREEN", "GREEN"],
+    ["YELLOW", "YELLOW", "YELLOW", null, null, "YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW"]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 4,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 3,
+      "current_value": 0
+    }
+  ]
+} 

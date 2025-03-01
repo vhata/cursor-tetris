@@ -1,0 +1,38 @@
+{
+  "name": "Stairway to Heaven",
+  "description": "Clear the stairway pattern in 8 pieces or less. Mind the gaps!",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, "CYAN"],
+    [null, null, null, null, null, null, null, null, "CYAN", "CYAN"],
+    [null, null, null, null, null, null, null, "CYAN", "CYAN", "CYAN"],
+    [null, null, null, null, null, null, "CYAN", "CYAN", "CYAN", "CYAN"],
+    [null, null, null, null, null, "CYAN", "CYAN", "CYAN", "CYAN", "CYAN"],
+    [null, null, null, null, "CYAN", "CYAN", "CYAN", "CYAN", "CYAN", "CYAN"]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 6,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 8,
+      "current_value": 0
+    }
+  ]
+} 

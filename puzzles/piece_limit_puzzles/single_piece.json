@@ -1,0 +1,38 @@
+{
+  "name": "One Shot",
+  "description": "Clear a line with just one piece! The gap is exactly the right size for an I-piece.",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["RED", "RED", "RED", "RED", null, null, null, null, "RED", "RED"]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 1,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 1,
+      "current_value": 0
+    }
+  ]
+} 

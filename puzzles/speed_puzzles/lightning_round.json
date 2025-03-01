@@ -1,0 +1,38 @@
+{
+  "name": "Lightning Round",
+  "description": "Clear 3 lines in just 15 seconds! Every second counts in this lightning-fast challenge.",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["RED", "RED", "RED", "RED", "RED", "RED", "RED", "RED", null, null],
+    ["BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", null, null],
+    ["GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", null, null]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 3,
+      "current_value": 0
+    },
+    {
+      "goal_type": "time_limit",
+      "target_value": 15,
+      "current_value": 0
+    }
+  ]
+} 

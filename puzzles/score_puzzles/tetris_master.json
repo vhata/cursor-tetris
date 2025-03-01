@@ -1,0 +1,38 @@
+{
+  "name": "Tetris Master",
+  "description": "Score 2000 points by clearing multiple Tetrises (4 lines at once). The gaps are set up perfectly!",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["RED", "RED", "RED", "RED", "RED", "RED", "RED", "RED", "RED", null],
+    ["BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", null],
+    ["GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", null],
+    ["YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", null],
+    ["PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", null],
+    ["CYAN", "CYAN", "CYAN", "CYAN", "CYAN", "CYAN", "CYAN", "CYAN", "CYAN", null],
+    ["ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", null],
+    ["RED", "RED", "RED", "RED", "RED", "RED", "RED", "RED", "RED", null]
+  ],
+  "goals": [
+    {
+      "goal_type": "score",
+      "target_value": 2000,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 5,
+      "current_value": 0
+    }
+  ]
+} 
