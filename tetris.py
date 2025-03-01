@@ -330,27 +330,50 @@ class TetrisGame:
             return
 
         font = pygame.font.Font(None, 36)
-        y_pos = BLOCK_SIZE * 10  # Start below the next piece preview
+        small_font = pygame.font.Font(None, 28)  # Smaller font for longer text
+        y_pos = BLOCK_SIZE * 7  # Start higher up
+        sidebar_x = GRID_WIDTH * BLOCK_SIZE + 10
+        sidebar_width = SCREEN_WIDTH - sidebar_x - 10  # Leave 10px margin
         
-        # Draw puzzle name
-        name_text = font.render(self.puzzle.name, True, WHITE)
-        self.screen.blit(name_text, (GRID_WIDTH * BLOCK_SIZE + 10, y_pos))
-        y_pos += 40
+        # Draw puzzle name (with word wrap if needed)
+        words = self.puzzle.name.split()
+        lines = []
+        current_line = []
+        
+        for word in words:
+            test_line = ' '.join(current_line + [word])
+            if font.size(test_line)[0] <= sidebar_width:
+                current_line.append(word)
+            else:
+                if current_line:
+                    lines.append(' '.join(current_line))
+                current_line = [word]
+        if current_line:
+            lines.append(' '.join(current_line))
+        
+        for line in lines:
+            name_text = font.render(line, True, WHITE)
+            self.screen.blit(name_text, (sidebar_x, y_pos))
+            y_pos += 30
+        
+        y_pos += 20  # Add some spacing
         
         # Draw pieces used
         pieces_text = font.render(f'Pieces: {self.pieces_used}', True, WHITE)
-        self.screen.blit(pieces_text, (GRID_WIDTH * BLOCK_SIZE + 10, y_pos))
+        self.screen.blit(pieces_text, (sidebar_x, y_pos))
         y_pos += 40
         
         # Draw goals
         for goal in self.puzzle.goals:
             color = GREEN if goal.is_achieved() else WHITE
-            goal_text = font.render(
-                f'{goal.goal_type}: {goal.current_value}/{goal.target_value}',
+            # Format goal type to be more readable
+            goal_type = goal.goal_type.replace('_', ' ').title()
+            goal_text = small_font.render(
+                f'{goal_type}: {goal.current_value}/{goal.target_value}',
                 True, color
             )
-            self.screen.blit(goal_text, (GRID_WIDTH * BLOCK_SIZE + 10, y_pos))
-            y_pos += 40
+            self.screen.blit(goal_text, (sidebar_x, y_pos))
+            y_pos += 30
 
     def run(self) -> None:
         last_fall_time = pygame.time.get_ticks()
