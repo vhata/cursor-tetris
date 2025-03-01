@@ -1,9 +1,11 @@
-import pygame
-import random
-from typing import List, Tuple, Optional
-import sys
-from puzzle import Puzzle, load_puzzle_from_file
 import os
+import random
+import sys
+from typing import List, Optional
+
+import pygame
+
+from puzzle import Puzzle, load_puzzle_from_file
 
 # Initialize Pygame
 pygame.init()
@@ -17,20 +19,20 @@ SCREEN_WIDTH = BLOCK_SIZE * (GRID_WIDTH + 6)  # Extra space for next piece previ
 SCREEN_HEIGHT = BLOCK_SIZE * GRID_HEIGHT
 
 # Scoring constants
-SOFT_DROP_SCORE = 1    # Points per cell for soft drop
-HARD_DROP_SCORE = 2    # Points per cell for hard drop
+SOFT_DROP_SCORE = 1  # Points per cell for soft drop
+HARD_DROP_SCORE = 2  # Points per cell for hard drop
 
 # Level constants
-LINES_PER_LEVEL = 10   # Number of lines needed to advance to next level
+LINES_PER_LEVEL = 10  # Number of lines needed to advance to next level
 BASE_FALL_SPEED = 2.0  # Starting fall speed in seconds (slower start)
-SPEED_DECREASE = 0.2   # How much to decrease fall speed per level (more gradual)
+SPEED_DECREASE = 0.2  # How much to decrease fall speed per level (more gradual)
 MIN_FALL_SPEED = 0.15  # Minimum fall speed (maximum difficulty, slightly more forgiving)
 
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 DARK_GRAY = (30, 30, 30)  # Subtle grid color
-CYAN = (0, 240, 240)      # Slightly softer colors
+CYAN = (0, 240, 240)  # Slightly softer colors
 BLUE = (0, 0, 240)
 ORANGE = (240, 160, 0)
 YELLOW = (240, 240, 0)
@@ -40,64 +42,87 @@ RED = (240, 0, 0)
 
 # Shadow colors - 40% opacity (increased from 25%)
 SHADOW_COLORS = [
-    (0, 240, 240, 102),    # CYAN
-    (0, 0, 240, 102),      # BLUE
-    (240, 160, 0, 102),    # ORANGE
-    (240, 240, 0, 102),    # YELLOW
-    (0, 240, 0, 102),      # GREEN
-    (160, 0, 240, 102),    # PURPLE
-    (240, 0, 0, 102)       # RED
+    (0, 240, 240, 102),  # CYAN
+    (0, 0, 240, 102),  # BLUE
+    (240, 160, 0, 102),  # ORANGE
+    (240, 240, 0, 102),  # YELLOW
+    (0, 240, 0, 102),  # GREEN
+    (160, 0, 240, 102),  # PURPLE
+    (240, 0, 0, 102),  # RED
 ]
 
 # Tetromino shapes
 SHAPES = [
-    [[1, 1, 1, 1]],                         # I
-    [[1, 0, 0], [1, 1, 1]],                # J
-    [[0, 0, 1], [1, 1, 1]],                # L
-    [[1, 1], [1, 1]],                      # O
-    [[0, 1, 1], [1, 1, 0]],                # S
-    [[0, 1, 0], [1, 1, 1]],                # T
-    [[1, 1, 0], [0, 1, 1]]                 # Z
+    [[1, 1, 1, 1]],  # I
+    [[1, 0, 0], [1, 1, 1]],  # J
+    [[0, 0, 1], [1, 1, 1]],  # L
+    [[1, 1], [1, 1]],  # O
+    [[0, 1, 1], [1, 1, 0]],  # S
+    [[0, 1, 0], [1, 1, 1]],  # T
+    [[1, 1, 0], [0, 1, 1]],  # Z
 ]
 
 COLORS = [CYAN, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED]
 
+
 class Tetromino:
-    def __init__(self):
-        self.shape_idx = random.randint(0, len(SHAPES) - 1)
-        self.shape = [row[:] for row in SHAPES[self.shape_idx]]
-        self.color = COLORS[self.shape_idx]
+    def __init__(self) -> None:
+        self.shapes = {
+            "I": [[1, 1, 1, 1]],
+            "O": [[1, 1], [1, 1]],
+            "T": [[0, 1, 0], [1, 1, 1]],
+            "S": [[0, 1, 1], [1, 1, 0]],
+            "Z": [[1, 1, 0], [0, 1, 1]],
+            "J": [[1, 0, 0], [1, 1, 1]],
+            "L": [[0, 0, 1], [1, 1, 1]],
+        }
+        self.colors = {
+            "I": "CYAN",
+            "O": "YELLOW",
+            "T": "PURPLE",
+            "S": "GREEN",
+            "Z": "RED",
+            "J": "BLUE",
+            "L": "ORANGE",
+        }
+        self.shape_type = random.choice(list(self.shapes.keys()))
+        self.shape = self.shapes[self.shape_type]
+        self.color = self.colors[self.shape_type]
         self.x = GRID_WIDTH // 2 - len(self.shape[0]) // 2
         self.y = 0
 
     def rotate(self) -> None:
         self.shape = list(zip(*self.shape[::-1]))
 
+
 class TetrisGame:
-    def __init__(self, puzzle: Optional[Puzzle] = None):
+    def __init__(self, puzzle: Optional[Puzzle] = None) -> None:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Tetris")
         self.clock = pygame.time.Clock()
-        self.grid = [[None for _ in range(GRID_WIDTH)] for _ in range(GRID_HEIGHT)]
-        self.current_piece = Tetromino()
-        self.next_piece = Tetromino()
-        self.game_over = False
-        self.paused = False
+        self.font = pygame.font.Font(None, 36)
+        self.grid: List[List[Optional[str]]] = [
+            [None for _ in range(GRID_WIDTH)] for _ in range(GRID_HEIGHT)
+        ]
+        self.current_piece: Optional[Tetromino] = None
+        self.next_piece: Optional[Tetromino] = None
         self.score = 0
         self.level = 1
         self.lines_cleared = 0
+        self.game_over = False
+        self.paused = False
+        self.pieces_used = 0
+        self.width = SCREEN_WIDTH
+        self.height = SCREEN_HEIGHT
         self.fall_speed = BASE_FALL_SPEED
-        self.pieces_used = 0  # Track number of pieces used for puzzle mode
-        
-        # Puzzle mode attributes
         self.puzzle = puzzle
         self.is_puzzle_mode = puzzle is not None
         if self.is_puzzle_mode:
             self.load_puzzle_grid()
-        
+
         # Create a surface for shadow pieces with alpha channel
         self.shadow_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
-        
+
         # Check if game is blocked from the start
         if self.check_blockout(self.current_piece):
             self.game_over = True
@@ -105,13 +130,13 @@ class TetrisGame:
     def load_puzzle_grid(self) -> None:
         """Load the initial grid state from puzzle data."""
         color_map = {
-            'CYAN': CYAN,
-            'BLUE': BLUE,
-            'ORANGE': ORANGE,
-            'YELLOW': YELLOW,
-            'GREEN': GREEN,
-            'PURPLE': PURPLE,
-            'RED': RED
+            "CYAN": CYAN,
+            "BLUE": BLUE,
+            "ORANGE": ORANGE,
+            "YELLOW": YELLOW,
+            "GREEN": GREEN,
+            "PURPLE": PURPLE,
+            "RED": RED,
         }
         for y, row in enumerate(self.puzzle.grid_data):
             for x, cell in enumerate(row):
@@ -141,17 +166,21 @@ class TetrisGame:
                 pattern_x = goal.pattern_x
                 pattern_y = goal.pattern_y
                 matches = 0
-                
+
                 for y in range(len(pattern)):
                     for x in range(len(pattern[0])):
                         grid_y = pattern_y + y
                         grid_x = pattern_x + x
-                        
+
                         if pattern[y][x] is not None:
-                            if (grid_y < 0 or grid_y >= GRID_HEIGHT or
-                                grid_x < 0 or grid_x >= GRID_WIDTH):
+                            if (
+                                grid_y < 0
+                                or grid_y >= GRID_HEIGHT
+                                or grid_x < 0
+                                or grid_x >= GRID_WIDTH
+                            ):
                                 continue
-                            
+
                             color_name = None
                             if self.grid[grid_y][grid_x] == CYAN:
                                 color_name = "CYAN"
@@ -167,28 +196,32 @@ class TetrisGame:
                                 color_name = "PURPLE"
                             elif self.grid[grid_y][grid_x] == RED:
                                 color_name = "RED"
-                            
+
                             if color_name == pattern[y][x]:
                                 matches += 1
-                
+
                 goal.update(matches)
 
         # Check if all goals are achieved
         if self.puzzle.is_completed():
             self.game_over = True
 
-    def check_blockout(self, piece: Tetromino) -> bool:
+    def check_blockout(self, piece: Optional[Tetromino]) -> bool:
         """Check if a piece can be placed at its starting position."""
+        if not piece:
+            return False
         for y, row in enumerate(piece.shape):
             for x, cell in enumerate(row):
                 if cell:
                     new_x = piece.x + x
                     new_y = piece.y + y
                     # Check if the position is already occupied
-                    if new_y >= 0 and (new_y >= GRID_HEIGHT or 
-                                     new_x < 0 or 
-                                     new_x >= GRID_WIDTH or 
-                                     self.grid[new_y][new_x] is not None):
+                    if new_y >= 0 and (
+                        new_y >= GRID_HEIGHT
+                        or new_x < 0
+                        or new_x >= GRID_WIDTH
+                        or self.grid[new_y][new_x] is not None
+                    ):
                         return True
         return False
 
@@ -207,13 +240,13 @@ class TetrisGame:
                     self.screen,
                     DARK_GRAY,  # Changed from WHITE to DARK_GRAY
                     (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE),
-                    1
+                    1,
                 )
                 if self.grid[y][x]:
                     pygame.draw.rect(
                         self.screen,
                         self.grid[y][x],
-                        (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE - 1, BLOCK_SIZE - 1)
+                        (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE - 1, BLOCK_SIZE - 1),
                     )
 
     def draw_current_piece(self) -> None:
@@ -224,35 +257,38 @@ class TetrisGame:
                         pygame.draw.rect(
                             self.screen,
                             self.current_piece.color,
-                            ((self.current_piece.x + x) * BLOCK_SIZE,
-                             (self.current_piece.y + y) * BLOCK_SIZE,
-                             BLOCK_SIZE - 1, BLOCK_SIZE - 1)
+                            (
+                                (self.current_piece.x + x) * BLOCK_SIZE,
+                                (self.current_piece.y + y) * BLOCK_SIZE,
+                                BLOCK_SIZE - 1,
+                                BLOCK_SIZE - 1,
+                            ),
                         )
 
     def draw_next_piece(self) -> None:
         # Draw next piece preview
         next_piece_x = GRID_WIDTH * BLOCK_SIZE + BLOCK_SIZE
         next_piece_y = BLOCK_SIZE * 2
-        
+
         # Draw "Next:" label
         font = pygame.font.Font(None, 36)
-        next_label = font.render('Next:', True, WHITE)
+        next_label = font.render("Next:", True, WHITE)
         self.screen.blit(next_label, (next_piece_x, BLOCK_SIZE))
-        
+
         # Draw preview box
         pygame.draw.rect(
             self.screen,
             DARK_GRAY,  # Match the grid color
             (next_piece_x, next_piece_y, 4 * BLOCK_SIZE, 4 * BLOCK_SIZE),
-            1
+            1,
         )
-        
+
         # Center the piece in the preview box
         piece_width = len(self.next_piece.shape[0]) * BLOCK_SIZE
         piece_height = len(self.next_piece.shape) * BLOCK_SIZE
         center_x = next_piece_x + (4 * BLOCK_SIZE - piece_width) // 2
         center_y = next_piece_y + (4 * BLOCK_SIZE - piece_height) // 2
-        
+
         # Draw the next piece
         for y, row in enumerate(self.next_piece.shape):
             for x, cell in enumerate(row):
@@ -260,9 +296,12 @@ class TetrisGame:
                     pygame.draw.rect(
                         self.screen,
                         self.next_piece.color,
-                        (center_x + x * BLOCK_SIZE,
-                         center_y + y * BLOCK_SIZE,
-                         BLOCK_SIZE - 1, BLOCK_SIZE - 1)
+                        (
+                            center_x + x * BLOCK_SIZE,
+                            center_y + y * BLOCK_SIZE,
+                            BLOCK_SIZE - 1,
+                            BLOCK_SIZE - 1,
+                        ),
                     )
 
     def check_collision(self, x_offset: int = 0, y_offset: int = 0) -> bool:
@@ -271,30 +310,37 @@ class TetrisGame:
                 if cell:
                     new_x = self.current_piece.x + x + x_offset
                     new_y = self.current_piece.y + y + y_offset
-                    if (new_x < 0 or new_x >= GRID_WIDTH or
-                        new_y >= GRID_HEIGHT or
-                        (new_y >= 0 and self.grid[new_y][new_x] is not None)):
+                    if (
+                        new_x < 0
+                        or new_x >= GRID_WIDTH
+                        or new_y >= GRID_HEIGHT
+                        or (new_y >= 0 and self.grid[new_y][new_x] is not None)
+                    ):
                         return True
         return False
 
     def lock_piece(self) -> None:
+        if not self.current_piece:
+            return
         for y, row in enumerate(self.current_piece.shape):
             for x, cell in enumerate(row):
                 if cell:
                     if self.current_piece.y + y < 0:
                         self.game_over = True
                         return
-                    self.grid[self.current_piece.y + y][self.current_piece.x + x] = self.current_piece.color
-        
+                    self.grid[self.current_piece.y + y][
+                        self.current_piece.x + x
+                    ] = self.current_piece.color
+
         self.pieces_used += 1  # Increment pieces used counter
         self.clear_lines()
         self.current_piece = self.next_piece
         self.next_piece = Tetromino()
-        
+
         # Check if the new piece can be placed
         if self.check_blockout(self.current_piece):
             self.game_over = True
-        
+
         if self.is_puzzle_mode:
             self.update_puzzle_goals()
 
@@ -305,8 +351,7 @@ class TetrisGame:
             self.level = new_level
             # Calculate new fall speed with a minimum limit
             self.fall_speed = max(
-                MIN_FALL_SPEED,
-                BASE_FALL_SPEED - (SPEED_DECREASE * (self.level - 1))
+                MIN_FALL_SPEED, BASE_FALL_SPEED - (SPEED_DECREASE * (self.level - 1))
             )
 
     def clear_lines(self) -> None:
@@ -320,13 +365,13 @@ class TetrisGame:
                 self.grid[0] = [None] * GRID_WIDTH
             else:
                 y -= 1
-        
+
         # Update score and level
         if lines_cleared > 0:
             self.score += (100 * lines_cleared) * lines_cleared  # Bonus for multiple lines
             self.lines_cleared += lines_cleared
             self.update_level()
-            
+
             # Check puzzle goals after clearing lines
             if self.is_puzzle_mode:
                 self.update_puzzle_goals()
@@ -337,7 +382,7 @@ class TetrisGame:
         """Calculate the lowest possible position for the current piece."""
         if not self.current_piece:
             return 0
-            
+
         shadow_y = self.current_piece.y
         while not self.check_collision(y_offset=shadow_y - self.current_piece.y + 1):
             shadow_y += 1
@@ -347,10 +392,10 @@ class TetrisGame:
         """Draw the shadow of the current piece."""
         if self.current_piece:
             shadow_y = self.get_shadow_position()
-            
+
             # Clear the shadow surface
             self.shadow_surface.fill((0, 0, 0, 0))
-            
+
             # Draw the shadow piece
             for y, row in enumerate(self.current_piece.shape):
                 for x, cell in enumerate(row):
@@ -359,11 +404,14 @@ class TetrisGame:
                         pygame.draw.rect(
                             self.shadow_surface,
                             shadow_color,
-                            ((self.current_piece.x + x) * BLOCK_SIZE,
-                             (shadow_y + y) * BLOCK_SIZE,
-                             BLOCK_SIZE - 1, BLOCK_SIZE - 1)
+                            (
+                                (self.current_piece.x + x) * BLOCK_SIZE,
+                                (shadow_y + y) * BLOCK_SIZE,
+                                BLOCK_SIZE - 1,
+                                BLOCK_SIZE - 1,
+                            ),
                         )
-            
+
             # Blit the shadow surface onto the main screen
             self.screen.blit(self.shadow_surface, (0, 0))
 
@@ -377,50 +425,49 @@ class TetrisGame:
         y_pos = BLOCK_SIZE * 7  # Start higher up
         sidebar_x = GRID_WIDTH * BLOCK_SIZE + 10
         sidebar_width = SCREEN_WIDTH - sidebar_x - 10  # Leave 10px margin
-        
+
         # Draw puzzle name (with word wrap if needed)
         words = self.puzzle.name.split()
         lines = []
         current_line = []
-        
+
         for word in words:
-            test_line = ' '.join(current_line + [word])
+            test_line = " ".join(current_line + [word])
             if font.size(test_line)[0] <= sidebar_width:
                 current_line.append(word)
             else:
                 if current_line:
-                    lines.append(' '.join(current_line))
+                    lines.append(" ".join(current_line))
                 current_line = [word]
         if current_line:
-            lines.append(' '.join(current_line))
-        
+            lines.append(" ".join(current_line))
+
         for line in lines:
             name_text = font.render(line, True, WHITE)
             self.screen.blit(name_text, (sidebar_x, y_pos))
             y_pos += 30
-        
+
         y_pos += 20  # Add some spacing
-        
+
         # Draw pieces used
-        pieces_text = font.render(f'Pieces: {self.pieces_used}', True, WHITE)
+        pieces_text = font.render(f"Pieces: {self.pieces_used}", True, WHITE)
         self.screen.blit(pieces_text, (sidebar_x, y_pos))
         y_pos += 40
-        
+
         # Draw goals
         for goal in self.puzzle.goals:
             color = GREEN if goal.is_achieved() else WHITE
             # Format goal type to be more readable
-            goal_type = goal.goal_type.replace('_', ' ').title()
+            goal_type = goal.goal_type.replace("_", " ").title()
             goal_text = small_font.render(
-                f'{goal_type}: {goal.current_value}/{goal.target_value}',
-                True, color
+                f"{goal_type}: {goal.current_value}/{goal.target_value}", True, color
             )
             self.screen.blit(goal_text, (sidebar_x, y_pos))
             y_pos += 30
 
     def run(self) -> None:
         last_fall_time = pygame.time.get_ticks()
-        
+
         while not self.game_over:
             current_time = pygame.time.get_ticks()
             delta_time = (current_time - last_fall_time) / 1000.0  # Convert to seconds
@@ -428,7 +475,7 @@ class TetrisGame:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return  # Return to menu instead of quitting
-                
+
                 if event.type == pygame.KEYDOWN:
                     if not self.paused:
                         if event.key == pygame.K_LEFT:
@@ -455,7 +502,7 @@ class TetrisGame:
                             self.add_drop_score(drop_distance, is_hard_drop=True)
                             self.lock_piece()
                             last_fall_time = current_time
-                    
+
                     if event.key == pygame.K_p:
                         self.paused = not self.paused
                     elif event.key == pygame.K_q:
@@ -475,14 +522,14 @@ class TetrisGame:
                 self.draw_shadow()
                 self.draw_current_piece()
                 self.draw_next_piece()
-                
+
                 # Draw score and level (if not in puzzle mode)
                 if not self.is_puzzle_mode:
                     font = pygame.font.Font(None, 36)
-                    score_text = font.render(f'Score: {self.score}', True, WHITE)
-                    level_text = font.render(f'Level: {self.level}', True, WHITE)
-                    lines_text = font.render(f'Lines: {self.lines_cleared}', True, WHITE)
-                    
+                    score_text = font.render(f"Score: {self.score}", True, WHITE)
+                    level_text = font.render(f"Level: {self.level}", True, WHITE)
+                    lines_text = font.render(f"Lines: {self.lines_cleared}", True, WHITE)
+
                     self.screen.blit(score_text, (GRID_WIDTH * BLOCK_SIZE + 10, BLOCK_SIZE * 7))
                     self.screen.blit(level_text, (GRID_WIDTH * BLOCK_SIZE + 10, BLOCK_SIZE * 8))
                     self.screen.blit(lines_text, (GRID_WIDTH * BLOCK_SIZE + 10, BLOCK_SIZE * 9))
@@ -495,19 +542,20 @@ class TetrisGame:
         # Game over screen
         self.screen.fill(BLACK)
         font = pygame.font.Font(None, 48)
-        
+
         if self.is_puzzle_mode and self.puzzle.is_completed():
             result_text = "Puzzle Completed!"
         else:
             result_text = "Game Over!"
-        
+
         game_over_text = font.render(result_text, True, WHITE)
         game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
         self.screen.blit(game_over_text, game_over_rect)
         pygame.display.flip()
-        
+
         # Wait for a moment before returning to menu
         pygame.time.wait(2000)
+
 
 class Menu:
     def __init__(self, screen):
@@ -520,20 +568,20 @@ class Menu:
 
     def draw(self):
         self.screen.fill(BLACK)
-        
+
         if self.state == "main":
             # Draw title
             title = self.font.render("TETRIS", True, WHITE)
             title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
             self.screen.blit(title, title_rect)
-            
+
             # Draw menu options
             for i, option in enumerate(self.main_options):
                 color = CYAN if i == self.selected_option else WHITE
                 text = self.font.render(option, True, color)
                 rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 60))
                 self.screen.blit(text, rect)
-        
+
         elif self.state == "instructions":
             # Draw instructions
             instructions = [
@@ -545,21 +593,21 @@ class Menu:
                 "P: Pause game",
                 "Q: Quit to menu",
                 "",
-                "Press ESC to return to menu"
+                "Press ESC to return to menu",
             ]
-            
+
             for i, line in enumerate(instructions):
                 text = self.small_font.render(line, True, WHITE)
                 rect = text.get_rect(left=50, top=50 + i * 40)
                 self.screen.blit(text, rect)
-        
+
         pygame.display.flip()
 
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "quit"
-            
+
             if event.type == pygame.KEYDOWN:
                 if self.state == "main":
                     if event.key == pygame.K_UP:
@@ -575,12 +623,13 @@ class Menu:
                             self.state = "instructions"
                         elif self.main_options[self.selected_option] == "Puzzle Mode":
                             return "puzzle"  # We'll implement this later
-                
+
                 elif self.state == "instructions":
                     if event.key == pygame.K_ESCAPE:
                         self.state = "main"
-        
+
         return "menu"
+
 
 class PuzzleMenu(Menu):
     def __init__(self, screen):
@@ -591,7 +640,7 @@ class PuzzleMenu(Menu):
             ("Speed Puzzles", "Complete objectives within a time limit"),
             ("Piece Limit Puzzles", "Solve puzzles with limited pieces"),
             ("Score Puzzles", "Achieve high scores with specific constraints"),
-            ("Pattern Puzzles", "Create specific patterns on the board")
+            ("Pattern Puzzles", "Create specific patterns on the board"),
         ]
         self.selected_category = 0
         self.selected_puzzle = 0
@@ -604,10 +653,10 @@ class PuzzleMenu(Menu):
         puzzles = []
         category_name = self.categories[category_idx][0].lower().replace(" ", "_")
         puzzle_dir = os.path.join("puzzles", category_name)
-        
+
         if not os.path.exists(puzzle_dir):
             return []
-            
+
         for filename in sorted(os.listdir(puzzle_dir)):
             if filename.endswith(".json"):
                 try:
@@ -619,40 +668,40 @@ class PuzzleMenu(Menu):
 
     def draw(self):
         self.screen.fill(BLACK)
-        
+
         if self.state == "category_select":
             # Draw title
             title = self.font.render("Select Puzzle Type", True, WHITE)
             title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, 50))
             self.screen.blit(title, title_rect)
-            
+
             # Draw category list
             start_y = 120
             for i, (name, desc) in enumerate(self.categories):
                 color = CYAN if i == self.selected_category else WHITE
-                
+
                 # Draw category name
                 text = self.font.render(name, True, color)
                 rect = text.get_rect(left=50, top=start_y + i * 60)
                 self.screen.blit(text, rect)
-                
+
                 # Draw category description
                 desc_text = self.small_font.render(desc, True, color)
                 desc_rect = desc_text.get_rect(left=50, top=start_y + i * 60 + 30)
                 self.screen.blit(desc_text, desc_rect)
-            
+
             # Draw instructions
             back_text = self.small_font.render("Press ESC to return to menu", True, WHITE)
             back_rect = back_text.get_rect(bottom=SCREEN_HEIGHT - 20, centerx=SCREEN_WIDTH // 2)
             self.screen.blit(back_text, back_rect)
-        
+
         elif self.state == "puzzle_select":
             # Draw title with category name
             category_name = self.categories[self.selected_category][0]
             title = self.font.render(f"Select {category_name}", True, WHITE)
             title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, 50))
             self.screen.blit(title, title_rect)
-            
+
             if not self.puzzles:
                 # No puzzles available message
                 msg = self.font.render("No puzzles available", True, WHITE)
@@ -665,41 +714,41 @@ class PuzzleMenu(Menu):
                     idx = i + self.scroll_offset
                     if idx >= len(self.puzzles):
                         break
-                    
+
                     puzzle = self.puzzles[idx]
                     color = CYAN if idx == self.selected_puzzle else WHITE
-                    
+
                     # Draw puzzle name
                     text = self.font.render(puzzle.name, True, color)
                     rect = text.get_rect(left=50, top=start_y + i * 60)
                     self.screen.blit(text, rect)
-                    
+
                     # Draw puzzle description
                     desc = self.small_font.render(puzzle.description, True, color)
                     desc_rect = desc.get_rect(left=50, top=start_y + i * 60 + 30)
                     self.screen.blit(desc, desc_rect)
-                
+
                 # Draw scroll indicators if needed
                 if self.scroll_offset > 0:
                     up_text = self.font.render("▲", True, WHITE)
                     self.screen.blit(up_text, (SCREEN_WIDTH - 50, 100))
-                
+
                 if self.scroll_offset + self.max_visible < len(self.puzzles):
                     down_text = self.font.render("▼", True, WHITE)
                     self.screen.blit(down_text, (SCREEN_WIDTH - 50, SCREEN_HEIGHT - 100))
-            
+
             # Draw back instruction
             back_text = self.small_font.render("Press ESC to return to categories", True, WHITE)
             back_rect = back_text.get_rect(bottom=SCREEN_HEIGHT - 20, centerx=SCREEN_WIDTH // 2)
             self.screen.blit(back_text, back_rect)
-        
+
         pygame.display.flip()
 
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "quit"
-            
+
             if event.type == pygame.KEYDOWN:
                 if self.state == "category_select":
                     if event.key == pygame.K_UP:
@@ -713,7 +762,7 @@ class PuzzleMenu(Menu):
                         self.state = "puzzle_select"
                     elif event.key == pygame.K_ESCAPE:
                         return "menu"
-                
+
                 elif self.state == "puzzle_select":
                     if event.key == pygame.K_UP:
                         self.selected_puzzle = max(0, self.selected_puzzle - 1)
@@ -727,22 +776,23 @@ class PuzzleMenu(Menu):
                         return ("puzzle_selected", self.puzzles[self.selected_puzzle])
                     elif event.key == pygame.K_ESCAPE:
                         self.state = "category_select"
-        
+
         return "puzzle_menu"
+
 
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Tetris")
     clock = pygame.time.Clock()
-    
+
     while True:
         menu = Menu(screen)
         # Main menu loop
         while True:
             action = menu.handle_input()
             menu.draw()
-            
+
             if action == "quit":
                 pygame.quit()
                 sys.exit()
@@ -755,7 +805,7 @@ if __name__ == "__main__":
                 while True:
                     result = puzzle_menu.handle_input()
                     puzzle_menu.draw()
-                    
+
                     if isinstance(result, tuple) and result[0] == "puzzle_selected":
                         game = TetrisGame(puzzle=result[1])
                         game.run()
@@ -765,8 +815,8 @@ if __name__ == "__main__":
                     elif result == "quit":
                         pygame.quit()
                         sys.exit()
-                    
+
                     clock.tick(60)
                 break
-            
-            clock.tick(60) 
+
+            clock.tick(60)
