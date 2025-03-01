@@ -135,6 +135,43 @@ class TetrisGame:
                     self.game_over = True
             elif goal.goal_type == "score":
                 goal.update(self.score)
+            elif goal.goal_type == "pattern":
+                # Check if the pattern matches at the specified location
+                pattern = goal.pattern
+                pattern_x = goal.pattern_x
+                pattern_y = goal.pattern_y
+                matches = 0
+                
+                for y in range(len(pattern)):
+                    for x in range(len(pattern[0])):
+                        grid_y = pattern_y + y
+                        grid_x = pattern_x + x
+                        
+                        if pattern[y][x] is not None:
+                            if (grid_y < 0 or grid_y >= GRID_HEIGHT or
+                                grid_x < 0 or grid_x >= GRID_WIDTH):
+                                continue
+                            
+                            color_name = None
+                            if self.grid[grid_y][grid_x] == CYAN:
+                                color_name = "CYAN"
+                            elif self.grid[grid_y][grid_x] == BLUE:
+                                color_name = "BLUE"
+                            elif self.grid[grid_y][grid_x] == ORANGE:
+                                color_name = "ORANGE"
+                            elif self.grid[grid_y][grid_x] == YELLOW:
+                                color_name = "YELLOW"
+                            elif self.grid[grid_y][grid_x] == GREEN:
+                                color_name = "GREEN"
+                            elif self.grid[grid_y][grid_x] == PURPLE:
+                                color_name = "PURPLE"
+                            elif self.grid[grid_y][grid_x] == RED:
+                                color_name = "RED"
+                            
+                            if color_name == pattern[y][x]:
+                                matches += 1
+                
+                goal.update(matches)
 
         # Check if all goals are achieved
         if self.puzzle.is_completed():
@@ -289,6 +326,12 @@ class TetrisGame:
             self.score += (100 * lines_cleared) * lines_cleared  # Bonus for multiple lines
             self.lines_cleared += lines_cleared
             self.update_level()
+            
+            # Check puzzle goals after clearing lines
+            if self.is_puzzle_mode:
+                self.update_puzzle_goals()
+                if self.puzzle.is_completed():
+                    self.game_over = True
 
     def get_shadow_position(self) -> int:
         """Calculate the lowest possible position for the current piece."""
