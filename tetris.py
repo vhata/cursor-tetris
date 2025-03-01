@@ -17,6 +17,12 @@ SCREEN_HEIGHT = BLOCK_SIZE * GRID_HEIGHT
 SOFT_DROP_SCORE = 1    # Points per cell for soft drop
 HARD_DROP_SCORE = 2    # Points per cell for hard drop
 
+# Level constants
+LINES_PER_LEVEL = 10   # Number of lines needed to advance to next level
+BASE_FALL_SPEED = 2.0  # Starting fall speed in seconds (slower start)
+SPEED_DECREASE = 0.2   # How much to decrease fall speed per level (more gradual)
+MIN_FALL_SPEED = 0.15  # Minimum fall speed (maximum difficulty, slightly more forgiving)
+
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -75,8 +81,9 @@ class TetrisGame:
         self.game_over = False
         self.paused = False
         self.score = 0
-        self.fall_time = 0
-        self.fall_speed = 0.5  # Time in seconds between automatic drops
+        self.level = 1
+        self.lines_cleared = 0
+        self.fall_speed = BASE_FALL_SPEED
         
         # Create a surface for shadow pieces with alpha channel
         self.shadow_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
@@ -178,6 +185,17 @@ class TetrisGame:
         self.current_piece = self.next_piece
         self.next_piece = Tetromino()
 
+    def update_level(self) -> None:
+        """Update level based on lines cleared and adjust fall speed."""
+        new_level = (self.lines_cleared // LINES_PER_LEVEL) + 1
+        if new_level != self.level:
+            self.level = new_level
+            # Calculate new fall speed with a minimum limit
+            self.fall_speed = max(
+                MIN_FALL_SPEED,
+                BASE_FALL_SPEED - (SPEED_DECREASE * (self.level - 1))
+            )
+
     def clear_lines(self) -> None:
         lines_cleared = 0
         y = GRID_HEIGHT - 1
@@ -190,9 +208,11 @@ class TetrisGame:
             else:
                 y -= 1
         
-        # Update score
+        # Update score and level
         if lines_cleared > 0:
             self.score += (100 * lines_cleared) * lines_cleared  # Bonus for multiple lines
+            self.lines_cleared += lines_cleared
+            self.update_level()
 
     def get_shadow_position(self) -> int:
         """Calculate the lowest possible position for the current piece."""
@@ -288,10 +308,15 @@ class TetrisGame:
                 self.draw_current_piece()
                 self.draw_next_piece()
                 
-                # Draw score
+                # Draw score and level
                 font = pygame.font.Font(None, 36)
                 score_text = font.render(f'Score: {self.score}', True, WHITE)
+                level_text = font.render(f'Level: {self.level}', True, WHITE)
+                lines_text = font.render(f'Lines: {self.lines_cleared}', True, WHITE)
+                
                 self.screen.blit(score_text, (GRID_WIDTH * BLOCK_SIZE + 10, BLOCK_SIZE * 7))
+                self.screen.blit(level_text, (GRID_WIDTH * BLOCK_SIZE + 10, BLOCK_SIZE * 8))
+                self.screen.blit(lines_text, (GRID_WIDTH * BLOCK_SIZE + 10, BLOCK_SIZE * 9))
 
                 pygame.display.flip()
                 self.clock.tick(60)
