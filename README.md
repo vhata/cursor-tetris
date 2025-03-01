@@ -1,35 +1,64 @@
 # Tetris
 
-A classic Tetris game implementation in Python using Pygame.
+A Python implementation of Tetris using Pygame, featuring both classic gameplay and puzzle modes.
 
-## Requirements
+## Development Setup
 
-- Python 3.8+
-- Pygame
+1. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Unix/macOS
+   # or
+   .\venv\Scripts\activate  # On Windows
+   ```
 
-## Installation
-
-1. Clone this repository
 2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Install pre-commit hooks:
+   ```bash
+   pre-commit install
+   ```
+
+## Code Quality
+
+This project uses several tools to maintain code quality:
+
+- **black**: Code formatting
+- **isort**: Import sorting
+- **flake8**: Style guide enforcement
+- **mypy**: Static type checking
+
+These checks run automatically before each commit. If any check fails, the commit will be blocked until the issues are fixed.
+
+To run the checks manually:
 ```bash
-pip install -r requirements.txt
+black .
+isort .
+flake8 .
+mypy .
 ```
 
-## Running the Game
+## Playing the Game
 
+Start the game:
 ```bash
 python tetris.py
 ```
 
-## Controls
-
-- Left Arrow: Move piece left
-- Right Arrow: Move piece right
-- Down Arrow: Soft drop
+### Controls
+- Left/Right Arrow: Move piece
 - Up Arrow: Rotate piece
+- Down Arrow: Soft drop
 - Space: Hard drop
 - P: Pause game
-- Q: Quit game
+- Q: Quit to menu
+
+### Game Modes
+- **Classic Mode**: Traditional Tetris gameplay with increasing difficulty
+- **Puzzle Mode**: Special challenges with specific goals to achieve
 
 ## License
 
