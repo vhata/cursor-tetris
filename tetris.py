@@ -246,15 +246,20 @@ class TetrisGame:
                                 self.current_piece.x += 1
                         elif event.key == pygame.K_DOWN:
                             if not self.check_collision(y_offset=1):
+                                start_y = self.current_piece.y
                                 self.current_piece.y += 1
+                                self.add_drop_score(1)  # Score for each cell dropped
                         elif event.key == pygame.K_UP:
                             original_shape = self.current_piece.shape
                             self.current_piece.rotate()
                             if self.check_collision():
                                 self.current_piece.shape = original_shape
                         elif event.key == pygame.K_SPACE:
+                            start_y = self.current_piece.y
                             while not self.check_collision(y_offset=1):
                                 self.current_piece.y += 1
+                            drop_distance = self.current_piece.y - start_y
+                            self.add_drop_score(drop_distance, is_hard_drop=True)
                             self.lock_piece()
                             last_fall_time = current_time
                     
