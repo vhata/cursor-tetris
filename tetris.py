@@ -281,8 +281,7 @@ class TetrisGame:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    return  # Return to menu instead of quitting
                 
                 if event.type == pygame.KEYDOWN:
                     if not self.paused:
@@ -314,8 +313,7 @@ class TetrisGame:
                     if event.key == pygame.K_p:
                         self.paused = not self.paused
                     elif event.key == pygame.K_q:
-                        pygame.quit()
-                        sys.exit()
+                        return  # Return to menu instead of quitting
 
             if not self.paused:
                 if delta_time > self.fall_speed:
@@ -352,9 +350,8 @@ class TetrisGame:
         self.screen.blit(game_over_text, game_over_rect)
         pygame.display.flip()
         
-        # Wait for a moment before quitting
+        # Wait for a moment before returning to menu
         pygame.time.wait(2000)
-        pygame.quit()
 
 class Menu:
     def __init__(self, screen):
