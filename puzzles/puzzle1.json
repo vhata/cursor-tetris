@@ -1,0 +1,38 @@
+{
+  "name": "Clear the Well",
+  "description": "Clear the well in the middle of the grid using as few pieces as possible.",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 10,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 5,
+      "current_value": 0
+    }
+  ]
+} 
