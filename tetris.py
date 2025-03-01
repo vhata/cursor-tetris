@@ -16,23 +16,24 @@ SCREEN_HEIGHT = BLOCK_SIZE * GRID_HEIGHT
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-CYAN = (0, 255, 255)    # I piece
-BLUE = (0, 0, 255)      # J piece
-ORANGE = (255, 165, 0)  # L piece
-YELLOW = (255, 255, 0)  # O piece
-GREEN = (0, 255, 0)     # S piece
-PURPLE = (128, 0, 128)  # T piece
-RED = (255, 0, 0)       # Z piece
+DARK_GRAY = (30, 30, 30)  # Subtle grid color
+CYAN = (0, 240, 240)      # Slightly softer colors
+BLUE = (0, 0, 240)
+ORANGE = (240, 160, 0)
+YELLOW = (240, 240, 0)
+GREEN = (0, 240, 0)
+PURPLE = (160, 0, 240)
+RED = (240, 0, 0)
 
-# Shadow colors - 25% opacity of original colors
+# Shadow colors - 40% opacity (increased from 25%)
 SHADOW_COLORS = [
-    (0, 255, 255, 64),      # CYAN
-    (0, 0, 255, 64),        # BLUE
-    (255, 165, 0, 64),      # ORANGE
-    (255, 255, 0, 64),      # YELLOW
-    (0, 255, 0, 64),        # GREEN
-    (128, 0, 128, 64),      # PURPLE
-    (255, 0, 0, 64)         # RED
+    (0, 240, 240, 102),    # CYAN
+    (0, 0, 240, 102),      # BLUE
+    (240, 160, 0, 102),    # ORANGE
+    (240, 240, 0, 102),    # YELLOW
+    (0, 240, 0, 102),      # GREEN
+    (160, 0, 240, 102),    # PURPLE
+    (240, 0, 0, 102)       # RED
 ]
 
 # Tetromino shapes
@@ -82,7 +83,7 @@ class TetrisGame:
             for x in range(GRID_WIDTH):
                 pygame.draw.rect(
                     self.screen,
-                    WHITE,
+                    DARK_GRAY,  # Changed from WHITE to DARK_GRAY
                     (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE),
                     1
                 )
