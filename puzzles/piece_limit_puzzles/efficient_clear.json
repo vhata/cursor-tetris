@@ -1,0 +1,38 @@
+{
+  "name": "Efficient Line Clear",
+  "description": "Clear 6 lines using only 8 pieces. Think carefully about piece placement!",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["RED", "RED", "RED", null, null, null, null, "BLUE", "BLUE", "BLUE"],
+    ["RED", "RED", "RED", null, null, null, null, "BLUE", "BLUE", "BLUE"],
+    ["RED", "RED", "RED", null, null, null, null, "BLUE", "BLUE", "BLUE"],
+    ["RED", "RED", "RED", null, null, null, null, "BLUE", "BLUE", "BLUE"]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 6,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 8,
+      "current_value": 0
+    }
+  ]
+} 

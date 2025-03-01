@@ -1,0 +1,38 @@
+{
+  "name": "Rainbow Clear",
+  "description": "Clear the rainbow pattern! Each line is a different color. Clear them in any order.",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["RED", "RED", "RED", "RED", "RED", "RED", "RED", "RED", null, null],
+    ["ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", "ORANGE", null, null],
+    ["YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", "YELLOW", null, null],
+    ["GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", "GREEN", null, null],
+    ["BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", "BLUE", null, null],
+    ["PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE", null, null]
+  ],
+  "goals": [
+    {
+      "goal_type": "clear_lines",
+      "target_value": 6,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 12,
+      "current_value": 0
+    }
+  ]
+} 

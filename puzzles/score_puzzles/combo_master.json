@@ -1,0 +1,38 @@
+{
+  "name": "Combo Master",
+  "description": "Score 1000 points by clearing multiple lines at once. Clearing more lines simultaneously gives bonus points!",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    ["CYAN", "CYAN", "CYAN", "CYAN", null, null, "GREEN", "GREEN", "GREEN", "GREEN"],
+    ["BLUE", "BLUE", "BLUE", "BLUE", null, null, "RED", "RED", "RED", "RED"],
+    ["YELLOW", "YELLOW", "YELLOW", "YELLOW", null, null, "PURPLE", "PURPLE", "PURPLE", "PURPLE"],
+    ["ORANGE", "ORANGE", "ORANGE", "ORANGE", null, null, "CYAN", "CYAN", "CYAN", "CYAN"],
+    ["GREEN", "GREEN", "GREEN", "GREEN", null, null, "BLUE", "BLUE", "BLUE", "BLUE"]
+  ],
+  "goals": [
+    {
+      "goal_type": "score",
+      "target_value": 1000,
+      "current_value": 0
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 10,
+      "current_value": 0
+    }
+  ]
+} 

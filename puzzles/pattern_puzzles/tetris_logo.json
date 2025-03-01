@@ -1,0 +1,45 @@
+{
+  "name": "Create the T",
+  "description": "Create a T-shaped pattern using purple blocks. The T should be 5 blocks wide and 3 blocks tall.",
+  "grid_data": [
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null]
+  ],
+  "goals": [
+    {
+      "goal_type": "pattern",
+      "target_value": 7,
+      "current_value": 0,
+      "pattern": [
+        [null, null, "PURPLE", null, null],
+        [null, null, "PURPLE", null, null],
+        ["PURPLE", "PURPLE", "PURPLE", "PURPLE", "PURPLE"]
+      ],
+      "pattern_x": 2,
+      "pattern_y": 15
+    },
+    {
+      "goal_type": "max_pieces",
+      "target_value": 4,
+      "current_value": 0
+    }
+  ]
+} 
