@@ -1,0 +1,39 @@
+#!/bin/bash
+
+echo "Running pre-commit checks..."
+
+# Run black
+echo "Running black..."
+black tetris.py puzzle.py
+if [ $? -ne 0 ]; then
+    echo "Black formatting failed. Please fix the issues and try committing again."
+    exit 1
+fi
+
+# Run isort
+echo "Running isort..."
+isort tetris.py puzzle.py
+if [ $? -ne 0 ]; then
+    echo "Import sorting failed. Please fix the issues and try committing again."
+    exit 1
+fi
+
+# Run flake8
+echo "Running flake8..."
+flake8 tetris.py puzzle.py
+if [ $? -ne 0 ]; then
+    echo "Flake8 check failed. Please fix the issues and try committing again."
+    exit 1
+fi
+
+# Run mypy
+echo "Running mypy..."
+mypy tetris.py puzzle.py
+if [ $? -ne 0 ]; then
+    echo "Type checking failed. Please fix the issues and try committing again."
+    exit 1
+fi
+
+# If we get here, all checks passed
+echo "All checks passed!"
+exit 0 
