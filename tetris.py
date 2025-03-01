@@ -542,16 +542,29 @@ class Menu:
 class PuzzleMenu(Menu):
     def __init__(self, screen):
         super().__init__(screen)
-        self.state = "puzzle_select"
-        self.puzzles = self.load_puzzles()
-        self.selected_option = 0
+        self.state = "category_select"  # category_select or puzzle_select
+        self.categories = [
+            ("Clearing Puzzles", "Clear specific patterns or lines"),
+            ("Speed Puzzles", "Complete objectives within a time limit"),
+            ("Piece Limit Puzzles", "Solve puzzles with limited pieces"),
+            ("Score Puzzles", "Achieve high scores with specific constraints"),
+            ("Pattern Puzzles", "Create specific patterns on the board")
+        ]
+        self.selected_category = 0
+        self.selected_puzzle = 0
         self.scroll_offset = 0
         self.max_visible = 8
+        self.puzzles = []  # Will be loaded when category is selected
 
-    def load_puzzles(self) -> List[Puzzle]:
-        """Load all puzzles from the puzzles directory."""
+    def load_puzzles_for_category(self, category_idx: int) -> List[Puzzle]:
+        """Load puzzles for the selected category."""
         puzzles = []
-        puzzle_dir = "puzzles"
+        category_name = self.categories[category_idx][0].lower().replace(" ", "_")
+        puzzle_dir = os.path.join("puzzles", category_name)
+        
+        if not os.path.exists(puzzle_dir):
+            return []
+            
         for filename in sorted(os.listdir(puzzle_dir)):
             if filename.endswith(".json"):
                 try:
@@ -564,39 +577,78 @@ class PuzzleMenu(Menu):
     def draw(self):
         self.screen.fill(BLACK)
         
-        # Draw title
-        title = self.font.render("Select Puzzle", True, WHITE)
-        title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, 50))
-        self.screen.blit(title, title_rect)
-        
-        # Draw puzzle list
-        start_y = 120
-        for i in range(min(self.max_visible, len(self.puzzles))):
-            idx = i + self.scroll_offset
-            if idx >= len(self.puzzles):
-                break
+        if self.state == "category_select":
+            # Draw title
+            title = self.font.render("Select Puzzle Type", True, WHITE)
+            title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, 50))
+            self.screen.blit(title, title_rect)
+            
+            # Draw category list
+            start_y = 120
+            for i, (name, desc) in enumerate(self.categories):
+                color = CYAN if i == self.selected_category else WHITE
                 
-            puzzle = self.puzzles[idx]
-            color = CYAN if idx == self.selected_option else WHITE
+                # Draw category name
+                text = self.font.render(name, True, color)
+                rect = text.get_rect(left=50, top=start_y + i * 60)
+                self.screen.blit(text, rect)
+                
+                # Draw category description
+                desc_text = self.small_font.render(desc, True, color)
+                desc_rect = desc_text.get_rect(left=50, top=start_y + i * 60 + 30)
+                self.screen.blit(desc_text, desc_rect)
             
-            # Draw puzzle name
-            text = self.font.render(puzzle.name, True, color)
-            rect = text.get_rect(left=50, top=start_y + i * 60)
-            self.screen.blit(text, rect)
+            # Draw instructions
+            back_text = self.small_font.render("Press ESC to return to menu", True, WHITE)
+            back_rect = back_text.get_rect(bottom=SCREEN_HEIGHT - 20, centerx=SCREEN_WIDTH // 2)
+            self.screen.blit(back_text, back_rect)
+        
+        elif self.state == "puzzle_select":
+            # Draw title with category name
+            category_name = self.categories[self.selected_category][0]
+            title = self.font.render(f"Select {category_name}", True, WHITE)
+            title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, 50))
+            self.screen.blit(title, title_rect)
             
-            # Draw puzzle description
-            desc = self.small_font.render(puzzle.description, True, color)
-            desc_rect = desc.get_rect(left=50, top=start_y + i * 60 + 30)
-            self.screen.blit(desc, desc_rect)
-        
-        # Draw scroll indicators if needed
-        if self.scroll_offset > 0:
-            up_text = self.font.render("▲", True, WHITE)
-            self.screen.blit(up_text, (SCREEN_WIDTH - 50, 100))
-        
-        if self.scroll_offset + self.max_visible < len(self.puzzles):
-            down_text = self.font.render("▼", True, WHITE)
-            self.screen.blit(down_text, (SCREEN_WIDTH - 50, SCREEN_HEIGHT - 100))
+            if not self.puzzles:
+                # No puzzles available message
+                msg = self.font.render("No puzzles available", True, WHITE)
+                msg_rect = msg.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+                self.screen.blit(msg, msg_rect)
+            else:
+                # Draw puzzle list
+                start_y = 120
+                for i in range(min(self.max_visible, len(self.puzzles))):
+                    idx = i + self.scroll_offset
+                    if idx >= len(self.puzzles):
+                        break
+                    
+                    puzzle = self.puzzles[idx]
+                    color = CYAN if idx == self.selected_puzzle else WHITE
+                    
+                    # Draw puzzle name
+                    text = self.font.render(puzzle.name, True, color)
+                    rect = text.get_rect(left=50, top=start_y + i * 60)
+                    self.screen.blit(text, rect)
+                    
+                    # Draw puzzle description
+                    desc = self.small_font.render(puzzle.description, True, color)
+                    desc_rect = desc.get_rect(left=50, top=start_y + i * 60 + 30)
+                    self.screen.blit(desc, desc_rect)
+                
+                # Draw scroll indicators if needed
+                if self.scroll_offset > 0:
+                    up_text = self.font.render("▲", True, WHITE)
+                    self.screen.blit(up_text, (SCREEN_WIDTH - 50, 100))
+                
+                if self.scroll_offset + self.max_visible < len(self.puzzles):
+                    down_text = self.font.render("▼", True, WHITE)
+                    self.screen.blit(down_text, (SCREEN_WIDTH - 50, SCREEN_HEIGHT - 100))
+            
+            # Draw back instruction
+            back_text = self.small_font.render("Press ESC to return to categories", True, WHITE)
+            back_rect = back_text.get_rect(bottom=SCREEN_HEIGHT - 20, centerx=SCREEN_WIDTH // 2)
+            self.screen.blit(back_text, back_rect)
         
         pygame.display.flip()
 
@@ -606,18 +658,32 @@ class PuzzleMenu(Menu):
                 return "quit"
             
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    self.selected_option = max(0, self.selected_option - 1)
-                    if self.selected_option < self.scroll_offset:
-                        self.scroll_offset = self.selected_option
-                elif event.key == pygame.K_DOWN:
-                    self.selected_option = min(len(self.puzzles) - 1, self.selected_option + 1)
-                    if self.selected_option >= self.scroll_offset + self.max_visible:
-                        self.scroll_offset = self.selected_option - self.max_visible + 1
-                elif event.key == pygame.K_RETURN:
-                    return ("puzzle_selected", self.puzzles[self.selected_option])
-                elif event.key == pygame.K_ESCAPE:
-                    return "menu"
+                if self.state == "category_select":
+                    if event.key == pygame.K_UP:
+                        self.selected_category = (self.selected_category - 1) % len(self.categories)
+                    elif event.key == pygame.K_DOWN:
+                        self.selected_category = (self.selected_category + 1) % len(self.categories)
+                    elif event.key == pygame.K_RETURN:
+                        self.puzzles = self.load_puzzles_for_category(self.selected_category)
+                        self.selected_puzzle = 0
+                        self.scroll_offset = 0
+                        self.state = "puzzle_select"
+                    elif event.key == pygame.K_ESCAPE:
+                        return "menu"
+                
+                elif self.state == "puzzle_select":
+                    if event.key == pygame.K_UP:
+                        self.selected_puzzle = max(0, self.selected_puzzle - 1)
+                        if self.selected_puzzle < self.scroll_offset:
+                            self.scroll_offset = self.selected_puzzle
+                    elif event.key == pygame.K_DOWN:
+                        self.selected_puzzle = min(len(self.puzzles) - 1, self.selected_puzzle + 1)
+                        if self.selected_puzzle >= self.scroll_offset + self.max_visible:
+                            self.scroll_offset = self.selected_puzzle - self.max_visible + 1
+                    elif event.key == pygame.K_RETURN and self.puzzles:
+                        return ("puzzle_selected", self.puzzles[self.selected_puzzle])
+                    elif event.key == pygame.K_ESCAPE:
+                        self.state = "category_select"
         
         return "puzzle_menu"
 
