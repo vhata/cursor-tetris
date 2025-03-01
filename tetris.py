@@ -5,6 +5,7 @@ import sys
 
 # Initialize Pygame
 pygame.init()
+pygame.font.init()  # Initialize the font module
 
 # Constants
 BLOCK_SIZE = 30
@@ -87,6 +88,25 @@ class TetrisGame:
         
         # Create a surface for shadow pieces with alpha channel
         self.shadow_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        
+        # Check if game is blocked from the start
+        if self.check_blockout(self.current_piece):
+            self.game_over = True
+
+    def check_blockout(self, piece: Tetromino) -> bool:
+        """Check if a piece can be placed at its starting position."""
+        for y, row in enumerate(piece.shape):
+            for x, cell in enumerate(row):
+                if cell:
+                    new_x = piece.x + x
+                    new_y = piece.y + y
+                    # Check if the position is already occupied
+                    if new_y >= 0 and (new_y >= GRID_HEIGHT or 
+                                     new_x < 0 or 
+                                     new_x >= GRID_WIDTH or 
+                                     self.grid[new_y][new_x] is not None):
+                        return True
+        return False
 
     def add_drop_score(self, distance: int, is_hard_drop: bool = False) -> None:
         """Add score for dropping pieces. Hard drops score more than soft drops."""
@@ -184,6 +204,10 @@ class TetrisGame:
         self.clear_lines()
         self.current_piece = self.next_piece
         self.next_piece = Tetromino()
+        
+        # Check if the new piece can be placed
+        if self.check_blockout(self.current_piece):
+            self.game_over = True
 
     def update_level(self) -> None:
         """Update level based on lines cleared and adjust fall speed."""
