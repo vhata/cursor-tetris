@@ -332,6 +332,101 @@ class TetrisGame:
         pygame.time.wait(2000)
         pygame.quit()
 
+class Menu:
+    def __init__(self, screen):
+        self.screen = screen
+        self.state = "main"  # main, instructions
+        self.selected_option = 0
+        self.main_options = ["Play Game", "Puzzle Mode", "Instructions", "Quit"]
+        self.font = pygame.font.Font(None, 48)
+        self.small_font = pygame.font.Font(None, 36)
+
+    def draw(self):
+        self.screen.fill(BLACK)
+        
+        if self.state == "main":
+            # Draw title
+            title = self.font.render("TETRIS", True, WHITE)
+            title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
+            self.screen.blit(title, title_rect)
+            
+            # Draw menu options
+            for i, option in enumerate(self.main_options):
+                color = CYAN if i == self.selected_option else WHITE
+                text = self.font.render(option, True, color)
+                rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 60))
+                self.screen.blit(text, rect)
+        
+        elif self.state == "instructions":
+            # Draw instructions
+            instructions = [
+                "Controls:",
+                "Left/Right Arrow: Move piece",
+                "Up Arrow: Rotate piece",
+                "Down Arrow: Soft drop",
+                "Space: Hard drop",
+                "P: Pause game",
+                "Q: Quit to menu",
+                "",
+                "Press ESC to return to menu"
+            ]
+            
+            for i, line in enumerate(instructions):
+                text = self.small_font.render(line, True, WHITE)
+                rect = text.get_rect(left=50, top=50 + i * 40)
+                self.screen.blit(text, rect)
+        
+        pygame.display.flip()
+
+    def handle_input(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return "quit"
+            
+            if event.type == pygame.KEYDOWN:
+                if self.state == "main":
+                    if event.key == pygame.K_UP:
+                        self.selected_option = (self.selected_option - 1) % len(self.main_options)
+                    elif event.key == pygame.K_DOWN:
+                        self.selected_option = (self.selected_option + 1) % len(self.main_options)
+                    elif event.key == pygame.K_RETURN:
+                        if self.main_options[self.selected_option] == "Quit":
+                            return "quit"
+                        elif self.main_options[self.selected_option] == "Play Game":
+                            return "play"
+                        elif self.main_options[self.selected_option] == "Instructions":
+                            self.state = "instructions"
+                        elif self.main_options[self.selected_option] == "Puzzle Mode":
+                            return "puzzle"  # We'll implement this later
+                
+                elif self.state == "instructions":
+                    if event.key == pygame.K_ESCAPE:
+                        self.state = "main"
+        
+        return "menu"
+
 if __name__ == "__main__":
-    game = TetrisGame()
-    game.run() 
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Tetris")
+    clock = pygame.time.Clock()
+    
+    while True:
+        menu = Menu(screen)
+        # Main menu loop
+        while True:
+            action = menu.handle_input()
+            menu.draw()
+            
+            if action == "quit":
+                pygame.quit()
+                sys.exit()
+            elif action == "play":
+                game = TetrisGame()
+                game.run()
+                break  # Return to menu after game ends
+            elif action == "puzzle":
+                # We'll implement puzzle mode later
+                pass
+            
+            clock.tick(60) 
